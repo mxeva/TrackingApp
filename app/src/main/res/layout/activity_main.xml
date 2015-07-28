@@ -72,7 +72,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"/>
 </TableRow>
-
+    <TableRow>
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -84,4 +84,5 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:textColor="#009933"/>
+</TableRow>
 </TableLayout>
