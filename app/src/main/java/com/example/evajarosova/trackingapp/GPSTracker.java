@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -29,8 +30,8 @@ public class GPSTracker extends Service implements LocationListener{
 
     Location location;
 
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 2;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 5;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 5;
 
     protected LocationManager locationManager;
 

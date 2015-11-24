@@ -18,8 +18,8 @@ package com.example.evajarosova.trackingapp;
 public class LocationAddress {
     private static final String TAG = "LocationAddress";
 
-    public static void getAddressFromLocation(final double latitude, final double longitude,
-                                              final Context context, final Handler handler) {
+    public static String getAddressFromLocation(final double latitude, final double longitude,
+                                                final Context context, final Handler handler) {
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -34,8 +34,8 @@ public class LocationAddress {
                         for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
                             sb.append(address.getAddressLine(i)).append("\n");
                         }
-                        sb.append(address.getLocality()).append("\n");
-                        sb.append(address.getPostalCode()).append("\n");
+//                        sb.append(address.getLocality()).append("\n");
+//                        sb.append(address.getPostalCode()).append("\n");
                         sb.append(address.getCountryName());
                         result = sb.toString();
                     }
@@ -47,8 +47,8 @@ public class LocationAddress {
                     if (result != null) {
                         message.what = 1;
                         Bundle bundle = new Bundle();
-                        result = "Sirka: " + latitude + "\nDelka: " + longitude +
-                                "\n\nAdresa:\n" + result;
+//                        result = "Sirka: " + latitude + "\nDelka: " + longitude +
+//                                "\n\nAdresa:\n" + result;
                         bundle.putString("address", result);
                         message.setData(bundle);
                     } else {
@@ -64,5 +64,6 @@ public class LocationAddress {
             }
         };
         thread.start();
+        return null;
     }
 }

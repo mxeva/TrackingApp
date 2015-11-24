@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+    android:orientation="vertical" >
+<!--android:paddingLeft="16dp"-->
+<!--android:paddingRight="16dp"-->
+    <fragment
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map"
+        tools:context="com.example.evajarosova.trackingapp.MapsActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+<TableRow android:id="@+id/btnBar"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:stretchColumns="1"
+    android:background="#80FFFFFF" >
+
+    <ImageButton
+        android:layout_weight=".25"
+        android:layout_width="0dip"
+        android:layout_height="56dp"
+        android:id="@+id/mapType"
+        android:src="@mipmap/location_web_site"
+        android:textColor="#FFFFFF" />
+    <ImageButton
+        android:layout_weight=".25"
+        android:layout_width="0dip"
+        android:layout_height="56dp"
+        android:id="@+id/showAddress"
+        android:src="@mipmap/device_access_location_found"
+        android:textColor="#FFFFFF"
+        android:baselineAlignBottom="false" />
+    <ImageButton
+        android:layout_weight=".25"
+        android:layout_width="0dip"
+        android:layout_height="56dp"
+        android:id="@+id/btnSearchUser"
+        android:src="@mipmap/action_search"
+        android:textColor="#FFFFFF"
+        android:baselineAlignBottom="false" />
+    <ImageButton
+        android:layout_weight=".25"
+        android:layout_width="0dip"
+        android:layout_height="56dp"
+        android:id="@+id/btnSendAddress"
+        android:src="@mipmap/social_share"
+        android:textColor="#FFFFFF"
+        android:baselineAlignBottom="false" />
+</TableRow>
+
+    <AutoCompleteTextView
+        android:layout_width="200px"
+        android:layout_height="wrap_content"
+        android:id="@+id/etUser"
+        android:background="#80FFFFFF"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/btnBar"
+        android:layout_weight=".7"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:layout_alignParentLeft="@+id/map"/>
+
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="15dp"
+        android:fontFamily="sans-serif-condensed"
+        android:background="#80FFFFFF"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvSearchAddress"
+        android:textColor="#000000"
+        android:background="#80FFFFFF"
+        android:textSize="15dp"
+        android:fontFamily="sans-serif-condensed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:visibility="gone" />
+
+</RelativeLayout>

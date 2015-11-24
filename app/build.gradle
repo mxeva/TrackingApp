@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "23.0.0 rc2"
+    buildToolsVersion "23.0.0 rc3"
 
     defaultConfig {
         applicationId "com.example.evajarosova.trackingapp"
         minSdkVersion 11
-        targetSdkVersion 22
+        targetSdkVersion 2
         versionCode 1
         versionName "1.0"
     }
@@ -20,6 +20,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.google.android.gms:play-services:7.5.0'
+    compile files('libs/ksoap2-j2me-core-2.1.2.jar')
+    compile files('libs/ksoap2-android-assembly-2.6.2-jar-with-dependencies.jar')
 }
