@@ -16,8 +16,10 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -40,6 +42,8 @@ import java.security.AccessController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static java.lang.Double.parseDouble;
 
 public class MapsActivity extends FragmentActivity implements AsyncResponse {
 
@@ -105,7 +109,7 @@ public class MapsActivity extends FragmentActivity implements AsyncResponse {
 
         etUser = (EditText) findViewById(R.id.etUser);
         AutoCompleteTextView mAutoView = (AutoCompleteTextView)findViewById(R.id.etUser);
-        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1 ,new String[] {"jarosovae@gmail.com","fousek.vladimir@gmail.com"});
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1 ,new String[] {"jarosovae@gmail.com","ejaroso@gmail.com","fousek.vladimir@gmail.com"});
         mAutoView.setAdapter(myAdapter);
         //schovat klavesnici
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -116,36 +120,26 @@ public class MapsActivity extends FragmentActivity implements AsyncResponse {
             @Override
             public void onClick(View v) {
                 etUser.setVisibility(View.VISIBLE);
-
-                if (etUser.getText()!=null){
-
-                    String user = etUser.getText().toString();
-
-                    //schovat klavesnici
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(etUser.getWindowToken(), 0);
-                    //Toast msg = Toast.makeText(getBaseContext(), user, Toast.LENGTH_LONG);
-                    //msg.show();
-                    // call WS
-                    SearchUser search = new SearchUser();
-                    SearchUser.MyAsyncTask myRequest = search.new MyAsyncTask(MapsActivity.this);
-                    myRequest.execute(user);
-                    myRequest.delegate = MapsActivity.this;
-
-    // zde bude kod zajistujici zobrazeni lokace nalezeneho uzivatele na zaklade souradnic z db
-
-                    tvSearchAddress.setVisibility(View.VISIBLE);
-                    tvAddress.setVisibility(View.GONE);
-
-                } else {
-                    //nic?
-                    //etUser.setVisibility(View.GONE);
-                }
-
+                searchUser();
             }
         });
 
-        // btnSearchUser.listene
+
+        etUser.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+                            searchUser();
+                            return true;
+                        default:
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
 
         btnSendAddress = (ImageButton) findViewById(R.id.btnSendAddress);
         btnSendAddress.setOnClickListener(new View.OnClickListener() {
@@ -198,11 +192,58 @@ public class MapsActivity extends FragmentActivity implements AsyncResponse {
 
     }
 
+    public void searchUser(){
+        if (etUser.getText()!=null){
+
+            String user = etUser.getText().toString();
+
+            //schovat klavesnici
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(etUser.getWindowToken(), 0);
+
+            // call WS
+            SearchUser search = new SearchUser();
+            SearchUser.MyAsyncTask myRequest = search.new MyAsyncTask(MapsActivity.this);
+            myRequest.execute(user);
+            myRequest.delegate = MapsActivity.this;
+
+            // zde bude kod zajistujici zobrazeni lokace nalezeneho uzivatele na zaklade souradnic z db
+
+            tvSearchAddress.setVisibility(View.VISIBLE);
+            tvAddress.setVisibility(View.GONE);
+
+        } else {
+        }
+    }
 
     @Override
     public void processFinish(String output) {
-        Log.d("Response From A task:", (String) output);
-        tvSearchAddress.setText((String) output);
+        Log.d("Response AsyncTaskWS:", (String) output);
+        String result = ((String) output);
+        if (result.equals("zadejte email platneho uzivatele")){
+            tvSearchAddress.setText("zadejte email platneho uzivatele");
+        } else {
+
+            String latLong = result.substring(result.lastIndexOf(';') + 1);
+            Log.d("Response latLong:", latLong);
+            String[] latHilfe = latLong.split("\n", 0);
+            String latitString = latHilfe[0];
+            String longitString = latLong.substring(latLong.lastIndexOf('\n') + 1);
+            double latit = parseDouble(latitString);
+            double longit = parseDouble(longitString);
+
+
+            String[] finalRes = result.split(";", 0);
+            String finalResult = finalRes[0];
+            Log.d("Response finalResult:", finalResult);
+
+//        String finalResult = latit + "\n" + longit;
+
+            tvSearchAddress.setText(finalResult);
+
+            setUpMap(latit, longit);
+        }
+
     }
 
     @Override
@@ -265,6 +306,24 @@ public class MapsActivity extends FragmentActivity implements AsyncResponse {
 
 // Changing marker icon
         marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+
+// adding marker
+        mMap.addMarker(marker);
+
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(
+                new LatLng(latitude, longitude)).zoom(17).build();
+
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+    private void setUpMap(Double latitude, Double longitude) {
+        GPSTracker gps = new GPSTracker(MapsActivity.this);
+
+// create marker
+        MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Here searched user");
+
+// Changing marker icon
+        marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
 
 // adding marker
         mMap.addMarker(marker);

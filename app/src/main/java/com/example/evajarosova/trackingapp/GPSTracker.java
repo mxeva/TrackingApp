@@ -12,6 +12,7 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.util.Log;
 
 /**
  * Created by evajarosova on 8.7.2015.

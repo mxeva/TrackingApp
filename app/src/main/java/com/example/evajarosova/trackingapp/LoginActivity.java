@@ -271,7 +271,7 @@ public class LoginActivity extends Activity implements OnClickListener,
                 // Revoke access button clicked
                 revokeGplusAccess();
             case R.id.btnMainAct:
-                // Go to MainActivity
+                // Go to MapsActivity
                 Intent intent = new Intent(this, MapsActivity.class);
                 intent.putExtra("email", txtEmail.getText());
                 intent.putExtra("name", txtName.getText());
